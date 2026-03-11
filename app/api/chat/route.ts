@@ -5,7 +5,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers'
 const model = new ChatOpenAI({
   model: 'qwen-plus',
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
   streaming: true,
   temperature: 0.7
 })
