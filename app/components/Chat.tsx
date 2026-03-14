@@ -27,6 +27,9 @@ export default function Chat() {
     e.preventDefault()
     if (!input.trim() || isLoading) return
 
+    console.log('🚀 [Frontend] Sending message:', input)
+    console.log('🆔 [Frontend] Session ID:', sessionId)
+
     const userMessage = { role: 'user' as const, content: input }
     setMessages(prev => [...prev, userMessage])
     setInput('')
@@ -34,30 +37,49 @@ export default function Chat() {
     setError(null)
 
     try {
+      console.log('📡 [Frontend] Fetching /api/chat...')
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input, sessionId })
       })
 
-      if (!response.ok || !response.body) throw new Error('Streaming failed')
+      console.log('📥 [Frontend] Response status:', response.status, response.ok)
+
+      if (!response.ok || !response.body) {
+        const errorText = await response.text()
+        console.error('❌ [Frontend] Response error:', errorText)
+        throw new Error(`Streaming failed: ${response.status} ${errorText}`)
+      }
 
       const reader = response.body.getReader()
       const decoder = new TextDecoder()
       let assistantMessage = ''
       let isNewMessage = true
 
+      console.log('📖 [Frontend] Starting to read stream...')
+
       while (true) {
         const { value, done } = await reader.read()
-        if (done) break
+        
+        if (done) {
+          console.log('✅ [Frontend] Stream completed')
+          break
+        }
 
         const chunk = decoder.decode(value, { stream: true })
+        console.log('📦 [Frontend] Received chunk:', chunk)
+        
         const events = chunk.split('\n\n').filter(Boolean)
 
         for (const event of events) {
           const data = event.replace('data: ', '').trim()
+          console.log('📨 [Frontend] Parsing event:', data)
+          
           try {
-            const { type, content, message } = JSON.parse(data)
+            const parsed = JSON.parse(data)
+            console.log('✅ [Frontend] Parsed data:', parsed)
+            const { type, content, message } = parsed
 
             if (type === 'chunk') {
               if (isNewMessage) {
@@ -73,21 +95,25 @@ export default function Chat() {
                 }
                 return newMessages
               })
+              console.log('💬 [Frontend] Updated assistant message:', assistantMessage)
             }
 
             if (type === 'error') {
+              console.error('❌ [Frontend] Error from server:', message)
               throw new Error(message || 'Stream error')
             }
           } catch (e) {
-            console.error('Event parsing error:', e)
+            console.error('❌ [Frontend] Event parsing error:', e)
+            console.error('❌ [Frontend] Raw data:', data)
           }
         }
       }
     } catch (err) {
+      console.error('❌ [Frontend] Overall error:', err)
       setError('Failed to get response. Please try again.')
-      console.error(err)
     } finally {
       setIsLoading(false)
+      console.log('🏁 [Frontend] Request finished')
     }
   }
 

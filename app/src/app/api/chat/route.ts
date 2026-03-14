@@ -1,13 +1,25 @@
 import { ChatOpenAI } from '@langchain/openai'
-import { StringOutputParser } from '@langchain/core/output_parsers'
+import { HumanMessage, SystemMessage, AIMessage } from '@langchain/core/messages'
+import { Annotation } from '@langchain/langgraph'
 
 // 千问 API 配置 (DashScope OpenAI 兼容)
 const model = new ChatOpenAI({
-  model: 'qwen-plus',
+  modelName: 'qwen-flash',
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+  configuration: {
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+  },
   streaming: true,
   temperature: 0.7
+})
+
+// 定义状态注解
+const ChatStateAnnotation = Annotation.Root({
+  sessionId: Annotation<string>,
+  inputMessage: Annotation<string>,
+  conversation: Annotation<Array<{role: 'user' | 'assistant', content: string}>>,
+  response: Annotation<string>,
+  fullResponse: Annotation<string>
 })
 
 interface ChatState {
@@ -24,59 +36,64 @@ async function appendMessage(state: ChatState) {
   return {
     ...state,
     conversation: [...state.conversation, { role: 'user', content: state.inputMessage }],
-    response: ''
+    response: '',
+    fullResponse: ''
   }
 }
 
-async function* generateResponse(state: ChatState) {
+async function generateResponse(state: ChatState): Promise<Partial<ChatState>> {
   // Build messages for API
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT }
+  const messages: Array<SystemMessage | HumanMessage | AIMessage> = [
+    new SystemMessage(SYSTEM_PROMPT)
   ]
   
   // Add conversation history
   for (const msg of state.conversation) {
-    messages.push({
-      role: msg.role === 'assistant' ? 'assistant' : 'user',
-      content: msg.content
-    })
+    if (msg.role === 'user') {
+      messages.push(new HumanMessage(msg.content))
+    } else {
+      messages.push(new AIMessage(msg.content))
+    }
   }
 
   // Add current message
-  messages.push({ role: 'user', content: state.inputMessage })
+  messages.push(new HumanMessage(state.inputMessage))
 
   // Call Qwen API with streaming
-  const stream = await model.bind({ }).stream(messages)
+  const stream = await model.stream(messages)
 
   let fullResponse = ''
 
   for await (const chunk of stream) {
-    const content = chunk.content || ''
+    const content = typeof chunk.content === 'string' ? chunk.content : (chunk.content?.[0]?.text || '')
     if (content) {
       fullResponse += content
-      yield {
-        ...state,
-        response: fullResponse,
-        fullResponse: fullResponse
-      }
     }
+  }
+
+  return {
+    ...state,
+    response: fullResponse,
+    fullResponse: fullResponse
   }
 }
 
-async function processResponseChunks(state: ChatState) {
-  for await (const chunk of generateResponse(state)) {
-    yield chunk
-  }
+async function processResponseChunks(state: ChatState): Promise<Partial<ChatState>> {
+  return generateResponse(state)
 }
 
 async function saveResponse(state: ChatState) {
   return {
     ...state,
-    conversation: [...state.conversation, { role: 'assistant', content: state.fullResponse }]
+    conversation: [...state.conversation, { role: 'assistant', content: state.fullResponse }],
+    response: '',
+    inputMessage: ''
   }
 }
 
-const workflow = new (await import('@langchain/langgraph')).StateGraph<ChatState>()
+const { StateGraph } = await import('@langchain/langgraph')
+
+const workflow = new StateGraph(ChatStateAnnotation)
   .addNode('appendMessage', appendMessage)
   .addNode('processResponseChunks', processResponseChunks)
   .addNode('saveResponse', saveResponse)
@@ -87,7 +104,32 @@ const workflow = new (await import('@langchain/langgraph')).StateGraph<ChatState
 const app = workflow.compile()
 
 export async function POST(req: Request) {
-  const { message, sessionId } = await req.json()
+  console.log('📥 [API] Received chat request')
+  
+  let requestBody
+  try {
+    requestBody = await req.json()
+    console.log('📝 [API] Request body:', JSON.stringify(requestBody, null, 2))
+  } catch (error) {
+    console.error('❌ [API] Failed to parse request body:', error)
+    return new Response(
+      JSON.stringify({ error: 'Invalid request body' }), 
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+
+  const { message, sessionId } = requestBody
+
+  console.log('💬 [API] Message:', message)
+  console.log('🆔 [API] Session ID:', sessionId)
+
+  if (!message) {
+    console.error('❌ [API] No message provided')
+    return new Response(
+      JSON.stringify({ error: 'No message provided' }), 
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
 
   const initialState: ChatState = {
     sessionId,
@@ -97,26 +139,38 @@ export async function POST(req: Request) {
     fullResponse: ''
   }
 
+  console.log('🚀 [API] Starting LangGraph workflow...')
+
   const encoder = new TextEncoder()
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        for await (const event of app.stream(initialState)) {
-          if (event.processResponseChunks?.response) {
-            controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({
-                type: 'chunk',
-                content: event.processResponseChunks.response
-              })}\n\n`)
-            )
-          }
+        console.log('⏳ [API] Calling app.invoke()...')
+        const result: any = await app.invoke(initialState)
+        console.log('✅ [API] Got result from LangGraph:', JSON.stringify(result, null, 2))
+        
+        // 直接使用最终结果中的 response
+        if (result?.fullResponse) {
+          console.log('📤 [API] Sending fullResponse chunk:', result.fullResponse)
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({
+              type: 'chunk',
+              content: result.fullResponse
+            })}\n\n`)
+          )
+        } else {
+          console.warn('⚠️ [API] No response in result')
         }
 
+        console.log('🏁 [API] Sending end signal')
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ type: 'end' })}\n\n`)
         )
       } catch (error) {
-        console.error('Error:', error)
+        console.error('❌ [API] Error during workflow execution:', error)
+        if (error instanceof Error) {
+          console.error('❌ [API] Error stack:', error.stack)
+        }
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({
             type: 'error',
@@ -124,11 +178,13 @@ export async function POST(req: Request) {
           })}\n\n`)
         )
       } finally {
+        console.log('🔒 [API] Closing stream')
         controller.close()
       }
     }
   })
 
+  console.log('📡 [API] Returning stream response')
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
