@@ -62,6 +62,14 @@ function PlusIcon({ className }: { className?: string }) {
   )
 }
 
+function StarIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+    </svg>
+  )
+}
+
 export default function Chat() {
   const [messages, setMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
   const [input, setInput] = useState('')
@@ -179,14 +187,30 @@ export default function Chat() {
     }
   }
 
+  const suggestions = [
+    { icon: '/', text: 'Explain quantum computing' },
+    { icon: '/', text: 'Write a poem about nature' },
+    { icon: '/', text: 'Help me debug code' },
+    { icon: '/', text: 'Summarize a topic' }
+  ]
+
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen animated-bg relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 grid-pattern pointer-events-none" />
+      <div className="absolute inset-0 noise-overlay" />
+      
+      {/* Floating orbs */}
+      <div className="orb orb-1 -top-48 -left-48" />
+      <div className="orb orb-2 top-1/3 -right-32" />
+      <div className="orb orb-3 bottom-20 left-1/4" />
+
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 border-r border-border bg-card">
+      <aside className="hidden md:flex flex-col w-72 border-r border-border/50 glass-strong relative z-10">
         <div className="p-4">
           <button
             onClick={handleNewChat}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3.5 rounded-xl bg-primary text-primary-foreground font-medium btn-shine glow-primary-subtle hover:glow-primary transition-all duration-300"
           >
             <PlusIcon className="w-5 h-5" />
             <span>New Chat</span>
@@ -199,17 +223,20 @@ export default function Chat() {
               Recent
             </p>
             {messages.length > 0 && (
-              <div className="px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm truncate">
-                {messages[0]?.content.slice(0, 30)}...
+              <div className="px-3 py-3 rounded-xl glass card-hover text-sm truncate cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <span className="text-foreground/90">{messages[0]?.content.slice(0, 28)}...</span>
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-              <UserIcon className="w-4 h-4 text-muted-foreground" />
+        <div className="p-4 border-t border-border/50">
+          <div className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-secondary/50 transition-colors cursor-pointer">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/20">
+              <UserIcon className="w-4 h-4 text-primary" />
             </div>
             <span className="text-sm text-foreground">User</span>
           </div>
@@ -217,57 +244,71 @@ export default function Chat() {
       </aside>
 
       {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col relative z-10">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border bg-card/50 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <SparkleIcon className="w-5 h-5 text-primary" />
+        <header className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-border/50 glass">
+          <div className="flex items-center gap-4">
+            <div className="relative group">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center breathe border border-primary/30">
+                <SparkleIcon className="w-5 h-5 text-primary animate-sparkle" />
               </div>
-              <div className="absolute inset-0 rounded-xl bg-primary/20 pulse-ring" />
+              <div className="absolute inset-0 rounded-2xl bg-primary/20 pulse-ring" />
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary/20 to-accent/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             <div>
-              <h1 className="font-semibold text-foreground">AI Assistant</h1>
+              <h1 className="font-semibold text-foreground flex items-center gap-2">
+                AI Assistant
+                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                  Online
+                </span>
+              </h1>
               <p className="text-xs text-muted-foreground">Powered by Qwen</p>
             </div>
           </div>
           
           <button
             onClick={handleNewChat}
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors"
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl glass hover:bg-secondary/80 transition-all duration-300 border border-border/50"
           >
             <PlusIcon className="w-5 h-5 text-foreground" />
           </button>
         </header>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto relative scan-line">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full px-4">
-              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
-                <SparkleIcon className="w-8 h-8 text-primary" />
+              {/* Hero Icon */}
+              <div className="relative mb-8">
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 flex items-center justify-center breathe border border-primary/20">
+                  <SparkleIcon className="w-10 h-10 text-primary animate-sparkle" />
+                </div>
+                <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 blur-2xl" />
+                {/* Floating stars */}
+                <StarIcon className="absolute -top-2 -right-2 w-4 h-4 text-primary/60 animate-pulse" />
+                <StarIcon className="absolute -bottom-1 -left-3 w-3 h-3 text-accent/60 animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <StarIcon className="absolute top-1/2 -right-4 w-2 h-2 text-primary/40 animate-pulse" style={{ animationDelay: '1s' }} />
               </div>
-              <h2 className="text-2xl font-semibold text-foreground mb-2 text-center">
-                How can I help you today?
+              
+              <h2 className="text-3xl font-bold text-foreground mb-3 text-center">
+                How can I <span className="gradient-text">help</span> you today?
               </h2>
-              <p className="text-muted-foreground text-center max-w-md">
+              <p className="text-muted-foreground text-center max-w-md mb-10">
                 Ask me anything. I'm here to help with questions, creative tasks, analysis, and more.
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8 w-full max-w-lg">
-                {[
-                  'Explain quantum computing',
-                  'Write a poem about nature',
-                  'Help me debug code',
-                  'Summarize a topic'
-                ].map((suggestion) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl">
+                {suggestions.map((suggestion, i) => (
                   <button
-                    key={suggestion}
-                    onClick={() => setInput(suggestion)}
-                    className="px-4 py-3 rounded-xl border border-border bg-card hover:bg-secondary transition-colors text-left text-sm text-foreground"
+                    key={suggestion.text}
+                    onClick={() => setInput(suggestion.text)}
+                    className={`group flex items-center gap-3 px-4 py-4 rounded-2xl glass card-hover text-left stagger-${i + 1}`}
                   >
-                    {suggestion}
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <span className="text-primary font-mono text-sm">{suggestion.icon}</span>
+                    </div>
+                    <span className="text-sm text-foreground/90">{suggestion.text}</span>
                   </button>
                 ))}
               </div>
@@ -280,10 +321,10 @@ export default function Chat() {
                   className={`flex gap-4 message-enter ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
                   style={{ animationDelay: `${i * 50}ms` }}
                 >
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+                  <div className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${
                     msg.role === 'user' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-secondary'
+                      ? 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20' 
+                      : 'bg-gradient-to-br from-secondary to-secondary/80 border border-border/50'
                   }`}>
                     {msg.role === 'user' ? (
                       <UserIcon className="w-4 h-4" />
@@ -294,10 +335,10 @@ export default function Chat() {
                   
                   <div className={`flex-1 ${msg.role === 'user' ? 'text-right' : ''}`}>
                     <div
-                      className={`inline-block px-4 py-3 rounded-2xl max-w-[85%] text-left ${
+                      className={`inline-block px-5 py-3.5 rounded-2xl max-w-[85%] text-left ${
                         msg.role === 'user'
-                          ? 'bg-primary text-primary-foreground rounded-br-md'
-                          : 'bg-card border border-border rounded-bl-md'
+                          ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-br-md shadow-lg shadow-primary/10'
+                          : 'glass rounded-bl-md shimmer'
                       }`}
                     >
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
@@ -308,22 +349,22 @@ export default function Chat() {
               
               {isLoading && (
                 <div className="flex gap-4 message-enter">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
-                    <SparkleIcon className="w-4 h-4 text-primary" />
+                  <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br from-secondary to-secondary/80 border border-border/50 flex items-center justify-center">
+                    <SparkleIcon className="w-4 h-4 text-primary animate-sparkle" />
                   </div>
-                  <div className="bg-card border border-border rounded-2xl rounded-bl-md px-4 py-3">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 bg-primary rounded-full animate-bounce-1" />
-                      <span className="w-2 h-2 bg-primary rounded-full animate-bounce-2" />
-                      <span className="w-2 h-2 bg-primary rounded-full animate-bounce-3" />
+                  <div className="glass rounded-2xl rounded-bl-md px-5 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce-1" />
+                      <span className="w-2.5 h-2.5 bg-primary/70 rounded-full animate-bounce-2" />
+                      <span className="w-2.5 h-2.5 bg-primary/40 rounded-full animate-bounce-3" />
                     </div>
                   </div>
                 </div>
               )}
               
               {error && (
-                <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm message-enter">
+                  <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {error}
@@ -336,9 +377,9 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border bg-card/50 backdrop-blur-sm p-4">
+        <div className="border-t border-border/50 glass p-4 md:p-6">
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-            <div className="relative flex items-end gap-2 rounded-2xl border border-border bg-input p-2 focus-within:border-primary/50 transition-colors">
+            <div className="relative flex items-end gap-3 rounded-2xl border border-border/50 bg-input/50 p-2 input-glow transition-all duration-300">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -346,13 +387,13 @@ export default function Chat() {
                 onKeyDown={handleKeyDown}
                 placeholder="Message AI Assistant..."
                 rows={1}
-                className="flex-1 resize-none bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[200px]"
+                className="flex-1 resize-none bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[200px]"
                 disabled={isLoading}
               />
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+                className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed btn-shine hover:shadow-lg hover:shadow-primary/20 transition-all duration-300"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
@@ -361,8 +402,12 @@ export default function Chat() {
                 )}
               </button>
             </div>
-            <p className="text-xs text-muted-foreground text-center mt-3">
-              Press Enter to send, Shift + Enter for new line
+            <p className="text-xs text-muted-foreground text-center mt-4 flex items-center justify-center gap-2">
+              <kbd className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-mono">Enter</kbd>
+              <span>to send</span>
+              <span className="text-border">|</span>
+              <kbd className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-mono">Shift + Enter</kbd>
+              <span>for new line</span>
             </p>
           </form>
         </div>
