@@ -58,34 +58,38 @@ function VioletFlower({ className }: { className?: string }) {
   )
 }
 
-// Dandelion decoration
+// Dandelion decoration - using static SVG to avoid hydration mismatch
 function Dandelion({ className, withSeeds = false }: { className?: string; withSeeds?: boolean }) {
   return (
     <svg className={className} viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M40 100V50" stroke="#9cb88b" strokeWidth="2" strokeLinecap="round" />
       <circle cx="40" cy="35" r="15" fill="#f5f2e8" opacity="0.6" />
-      {[...Array(12)].map((_, i) => (
-        <line
-          key={i}
-          x1="40"
-          y1="35"
-          x2={40 + Math.cos((i * 30 * Math.PI) / 180) * 18}
-          y2={35 + Math.sin((i * 30 * Math.PI) / 180) * 18}
-          stroke="#e8e4d8"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-      ))}
-      {[...Array(12)].map((_, i) => (
-        <circle
-          key={i}
-          cx={40 + Math.cos((i * 30 * Math.PI) / 180) * 18}
-          cy={35 + Math.sin((i * 30 * Math.PI) / 180) * 18}
-          r="3"
-          fill="#faf8f2"
-          opacity="0.7"
-        />
-      ))}
+      {/* Pre-rendered lines for dandelion */}
+      <line x1="40" y1="35" x2="58" y2="35" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="56" y2="44" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="49" y2="51" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="40" y2="53" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="31" y2="51" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="24" y2="44" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="22" y2="35" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="24" y2="26" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="31" y2="19" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="40" y2="17" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="49" y2="19" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      <line x1="40" y1="35" x2="56" y2="26" stroke="#e8e4d8" strokeWidth="1" strokeLinecap="round" />
+      {/* Pre-rendered circles for dandelion tips */}
+      <circle cx="58" cy="35" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="56" cy="44" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="49" cy="51" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="40" cy="53" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="31" cy="51" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="24" cy="44" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="22" cy="35" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="24" cy="26" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="31" cy="19" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="40" cy="17" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="49" cy="19" r="3" fill="#faf8f2" opacity="0.7" />
+      <circle cx="56" cy="26" r="3" fill="#faf8f2" opacity="0.7" />
       {withSeeds && (
         <>
           <circle cx="55" cy="20" r="2" fill="#f0ebe0" className="dandelion-seed" opacity="0.5" />
