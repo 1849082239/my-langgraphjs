@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fcfbfd;
+  --foreground: #2d2d3d;
+  --card: #ffffff;
+  --card-foreground: #2d2d3d;
+  --muted: #f8f6fa;
+  --muted-foreground: #9a9aad;
+  --border: #ede9f3;
+  --input: #ffffff;
+  --primary: #b8a4d6;
+  --primary-foreground: #ffffff;
+  --secondary: #f9f7fb;
+  --secondary-foreground: #2d2d3d;
+  --accent: #d4c4e8;
+  --destructive: #ef4444;
+  --radius: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Soft gradient background */
+.soft-bg {
+  background: linear-gradient(
+    145deg,
+    #fcfbfd 0%,
+    #f9f6fc 40%,
+    #faf8fc 100%
+  );
+}
+
+/* Message animations */
+@keyframes message-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: message-fade-in 0.3s ease-out forwards;
+}
+
+/* Typing indicator */
+@keyframes bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-bounce-1 {
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.animate-bounce-2 {
+  animation: bounce 1.4s ease-in-out 0.2s infinite;
+}
+
+.animate-bounce-3 {
+  animation: bounce 1.4s ease-in-out 0.4s infinite;
+}
+
+/* Soft glow */
+.soft-glow {
+  box-shadow: 0 2px 12px rgba(184, 164, 214, 0.2);
+}
+
+/* Input focus */
+.input-focus:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(184, 164, 214, 0.12);
+}
+
+/* Card hover */
+.card-hover {
+  transition: all 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(184, 164, 214, 0.1);
+  border-color: rgba(184, 164, 214, 0.25);
+}
+
+/* Subtle pulse */
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.gentle-pulse {
+  animation: gentle-pulse 3s ease-in-out infinite;
+}
+
+/* Staggered fade in */
+@keyframes stagger-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-1 { animation: stagger-fade 0.35s 0.05s ease-out forwards; opacity: 0; }
+.stagger-2 { animation: stagger-fade 0.35s 0.1s ease-out forwards; opacity: 0; }
+.stagger-3 { animation: stagger-fade 0.35s 0.15s ease-out forwards; opacity: 0; }
+.stagger-4 { animation: stagger-fade 0.35s 0.2s ease-out forwards; opacity: 0; }
+
+/* Floating decoration */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.float-gentle {
+  animation: float-gentle 5s ease-in-out infinite;
+}
+
+/* Sway animation for flowers */
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.sway {
+  animation: sway 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Dandelion float */
+@keyframes dandelion-float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translate(5px, -8px) rotate(5deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(2px, -15px) rotate(-3deg);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(-3px, -10px) rotate(2deg);
+    opacity: 0.45;
+  }
+}
+
+.dandelion-seed {
+  animation: dandelion-float 12s ease-in-out infinite;
+}
+
+.dandelion-seed-2 {
+  animation: dandelion-float 14s ease-in-out 2s infinite;
+}
+
+.dandelion-seed-3 {
+  animation: dandelion-float 10s ease-in-out 4s infinite;
+}
