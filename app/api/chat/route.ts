@@ -146,7 +146,7 @@ export async function POST(req: Request) {
     async start(controller) {
       try {
         console.log('⏳ [API] Calling app.invoke()...')
-        const result: any = await app.invoke(initialState)
+        const result = await app.invoke(initialState) as Partial<ChatState>
         console.log('✅ [API] Got result from LangGraph:', JSON.stringify(result, null, 2))
         
         // 直接使用最终结果中的 response
