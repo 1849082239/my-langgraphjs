@@ -145,22 +145,39 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        console.log('⏳ [API] Calling app.invoke()...')
-        const result: any = await app.invoke(initialState)
-        console.log('✅ [API] Got result from LangGraph:', JSON.stringify(result, null, 2))
-        
-        // 直接使用最终结果中的 response
-        if (result?.fullResponse) {
-          console.log('📤 [API] Sending fullResponse chunk:', result.fullResponse)
+        // console.log('⏳ [API] Calling app.invoke()...')
+        // const result: any = await app.invoke(initialState)
+        // console.log('✅ [API] Got result from LangGraph:', JSON.stringify(result, null, 2))
+
+        const messages = [
+          new SystemMessage(SYSTEM_PROMPT), 
+          new HumanMessage(message)
+        ];
+      
+        const eventStream = await model.stream(messages);
+        for await (const chunk of eventStream) {
+          console.log(chunk);
+          
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify({
               type: 'chunk',
-              content: result.fullResponse
+              content: chunk.content
             })}\n\n`)
           )
-        } else {
-          console.warn('⚠️ [API] No response in result')
         }
+        
+        // 直接使用最终结果中的 response
+        // if (result?.fullResponse) {
+        //   console.log('📤 [API] Sending fullResponse chunk:', result.fullResponse)
+        //   controller.enqueue(
+        //     encoder.encode(`data: ${JSON.stringify({
+        //       type: 'chunk',
+        //       content: result.fullResponse
+        //     })}\n\n`)
+        //   )
+        // } else {
+        //   console.warn('⚠️ [API] No response in result')
+        // }
 
         console.log('🏁 [API] Sending end signal')
         controller.enqueue(
