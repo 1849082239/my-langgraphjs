@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react'
 // Cute ghost mascot component
 function GhostMascot({ className, size = 'md' }: { className?: string; size?: 'sm' | 'md' | 'lg' }) {
   const sizeClasses = {
-    sm: 'w-8 h-8',
+    sm: 'w-9 h-9',
     md: 'w-12 h-12',
     lg: 'w-20 h-20'
   }
@@ -13,37 +13,28 @@ function GhostMascot({ className, size = 'md' }: { className?: string; size?: 's
   return (
     <div className={`${sizeClasses[size]} ${className}`}>
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Ghost body */}
         <path
           d="M50 10C28 10 15 28 15 50V85C15 87 17 88 19 87L28 80C30 78 33 78 35 80L42 87C44 89 47 89 50 87C53 89 56 89 58 87L65 80C67 78 70 78 72 80L81 87C83 88 85 87 85 85V50C85 28 72 10 50 10Z"
           fill="url(#ghost-gradient)"
-          stroke="#d4c4e8"
+          stroke="#e0d6ec"
           strokeWidth="2"
         />
-        {/* Blush */}
-        <ellipse cx="30" cy="52" rx="6" ry="4" fill="#f5d0e0" opacity="0.6" />
-        <ellipse cx="70" cy="52" rx="6" ry="4" fill="#f5d0e0" opacity="0.6" />
-        {/* Eyes */}
-        <ellipse cx="35" cy="42" rx="5" ry="6" fill="#4a4a6a" />
-        <ellipse cx="65" cy="42" rx="5" ry="6" fill="#4a4a6a" />
-        {/* Eye highlights */}
-        <circle cx="37" cy="40" r="2" fill="white" />
-        <circle cx="67" cy="40" r="2" fill="white" />
-        {/* Smile */}
+        <ellipse cx="30" cy="52" rx="5" ry="3" fill="#f5d0e0" opacity="0.5" />
+        <ellipse cx="70" cy="52" rx="5" ry="3" fill="#f5d0e0" opacity="0.5" />
+        <ellipse cx="35" cy="42" rx="4" ry="5" fill="#4a4a6a" />
+        <ellipse cx="65" cy="42" rx="4" ry="5" fill="#4a4a6a" />
+        <circle cx="37" cy="40" r="1.5" fill="white" />
+        <circle cx="67" cy="40" r="1.5" fill="white" />
         <path
-          d="M42 55C42 55 46 60 50 60C54 60 58 55 58 55"
+          d="M43 55C43 55 46 59 50 59C54 59 57 55 57 55"
           stroke="#4a4a6a"
-          strokeWidth="2.5"
+          strokeWidth="2"
           strokeLinecap="round"
         />
-        {/* Sparkles */}
-        <circle cx="25" cy="25" r="2" fill="#c9a7eb" className="twinkle" />
-        <circle cx="78" cy="30" r="1.5" fill="#9b7ec9" className="twinkle-delay-1" />
-        <circle cx="82" cy="60" r="2" fill="#d4c4e8" className="twinkle-delay-2" />
         <defs>
           <linearGradient id="ghost-gradient" x1="50" y1="10" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#f8f5fc" />
-            <stop offset="1" stopColor="#ebe4f5" />
+            <stop stopColor="#faf8fc" />
+            <stop offset="1" stopColor="#f0ebf7" />
           </linearGradient>
         </defs>
       </svg>
@@ -51,34 +42,72 @@ function GhostMascot({ className, size = 'md' }: { className?: string; size?: 's
   )
 }
 
-// Decorative flower component
-function FlowerDecoration({ className, variant = 1 }: { className?: string; variant?: 1 | 2 | 3 }) {
-  const colors = {
-    1: { petal: '#d4c4e8', center: '#9b7ec9' },
-    2: { petal: '#e8d4f0', center: '#c9a7eb' },
-    3: { petal: '#c9b8e0', center: '#8b6eb8' }
-  }
-  
+// Violet flower decoration
+function VioletFlower({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="20" cy="12" r="6" fill={colors[variant].petal} opacity="0.7" />
-      <circle cx="12" cy="20" r="6" fill={colors[variant].petal} opacity="0.7" />
-      <circle cx="28" cy="20" r="6" fill={colors[variant].petal} opacity="0.7" />
-      <circle cx="20" cy="28" r="6" fill={colors[variant].petal} opacity="0.7" />
-      <circle cx="20" cy="20" r="5" fill={colors[variant].center} />
+    <svg className={className} viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 80V45" stroke="#7a9c65" strokeWidth="2" strokeLinecap="round" />
+      <path d="M25 55C20 50 18 45 22 42" stroke="#7a9c65" strokeWidth="1.5" strokeLinecap="round" />
+      <ellipse cx="30" cy="25" rx="8" ry="12" fill="#c4b5dc" opacity="0.8" transform="rotate(-30 30 25)" />
+      <ellipse cx="30" cy="25" rx="8" ry="12" fill="#c4b5dc" opacity="0.8" transform="rotate(30 30 25)" />
+      <ellipse cx="30" cy="25" rx="8" ry="12" fill="#d4c4e8" opacity="0.8" transform="rotate(-60 30 25)" />
+      <ellipse cx="30" cy="25" rx="8" ry="12" fill="#d4c4e8" opacity="0.8" transform="rotate(60 30 25)" />
+      <ellipse cx="30" cy="25" rx="8" ry="12" fill="#e0d6ec" opacity="0.7" />
+      <circle cx="30" cy="25" r="4" fill="#f0e68c" opacity="0.8" />
     </svg>
   )
 }
 
-// Small star decoration
-function StarDecoration({ className }: { className?: string }) {
+// Dandelion decoration
+function Dandelion({ className, withSeeds = false }: { className?: string; withSeeds?: boolean }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M12 2L13.5 9H20L14.5 13L16 20L12 16L8 20L9.5 13L4 9H10.5L12 2Z"
-        fill="currentColor"
-        opacity="0.6"
-      />
+    <svg className={className} viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 100V50" stroke="#9cb88b" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="40" cy="35" r="15" fill="#f5f2e8" opacity="0.6" />
+      {[...Array(12)].map((_, i) => (
+        <line
+          key={i}
+          x1="40"
+          y1="35"
+          x2={40 + Math.cos((i * 30 * Math.PI) / 180) * 18}
+          y2={35 + Math.sin((i * 30 * Math.PI) / 180) * 18}
+          stroke="#e8e4d8"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+      ))}
+      {[...Array(12)].map((_, i) => (
+        <circle
+          key={i}
+          cx={40 + Math.cos((i * 30 * Math.PI) / 180) * 18}
+          cy={35 + Math.sin((i * 30 * Math.PI) / 180) * 18}
+          r="3"
+          fill="#faf8f2"
+          opacity="0.7"
+        />
+      ))}
+      {withSeeds && (
+        <>
+          <circle cx="55" cy="20" r="2" fill="#f0ebe0" className="dandelion-seed" opacity="0.5" />
+          <circle cx="60" cy="30" r="1.5" fill="#f0ebe0" className="dandelion-seed-2" opacity="0.4" />
+          <circle cx="52" cy="15" r="1.5" fill="#f0ebe0" className="dandelion-seed-3" opacity="0.45" />
+        </>
+      )}
+    </svg>
+  )
+}
+
+// Small lavender sprig
+function LavenderSprig({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 30 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 70V25" stroke="#8fa87a" strokeWidth="1.5" strokeLinecap="round" />
+      {[0, 8, 16, 24, 32].map((y, i) => (
+        <g key={i}>
+          <ellipse cx="12" cy={25 + y / 1.5} rx="3" ry="4" fill="#c4b5dc" opacity={0.7 - i * 0.1} />
+          <ellipse cx="18" cy={28 + y / 1.5} rx="3" ry="4" fill="#d4c4e8" opacity={0.7 - i * 0.1} />
+        </g>
+      ))}
     </svg>
   )
 }
@@ -272,29 +301,29 @@ export default function Chat() {
 
   return (
     <div className="flex h-screen soft-bg relative overflow-hidden">
-      {/* Subtle decorations */}
-      <div className="absolute top-20 left-10 opacity-30 float-gentle">
-        <FlowerDecoration className="w-16 h-16" variant={1} />
+      {/* Decorative elements */}
+      <div className="absolute bottom-0 left-8 opacity-25 sway pointer-events-none">
+        <VioletFlower className="w-16 h-24" />
       </div>
-      <div className="absolute bottom-32 right-20 opacity-25 float-gentle" style={{ animationDelay: '1s' }}>
-        <FlowerDecoration className="w-12 h-12" variant={2} />
+      <div className="absolute bottom-0 left-20 opacity-20 sway pointer-events-none" style={{ animationDelay: '0.5s' }}>
+        <LavenderSprig className="w-8 h-20" />
       </div>
-      <div className="absolute top-1/3 right-10 opacity-20">
-        <StarDecoration className="w-6 h-6 text-primary twinkle" />
+      <div className="absolute bottom-0 right-12 opacity-20 sway pointer-events-none" style={{ animationDelay: '1s' }}>
+        <Dandelion className="w-20 h-28" withSeeds />
       </div>
-      <div className="absolute bottom-1/4 left-1/4 opacity-20">
-        <StarDecoration className="w-5 h-5 text-accent twinkle-delay-1" />
+      <div className="absolute bottom-0 right-32 opacity-15 sway pointer-events-none" style={{ animationDelay: '1.5s' }}>
+        <VioletFlower className="w-12 h-18" />
       </div>
 
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 hidden md:flex flex-col border-r border-border bg-white/60 backdrop-blur-sm relative z-10 overflow-hidden`}>
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <div className="flex items-center gap-3">
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} flex-shrink-0 transition-all duration-300 hidden md:flex flex-col border-r border-border bg-white/70 backdrop-blur-sm relative z-10 overflow-hidden`}>
+        <div className="flex items-center justify-between h-14 px-4 border-b border-border">
+          <div className="flex items-center gap-2">
             <GhostMascot size="sm" className="float-gentle" />
-            <span className="font-semibold text-foreground">Aether AI</span>
+            <span className="font-medium text-foreground text-sm">Aether AI</span>
           </div>
           <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setSidebarOpen(false)}
             className="p-1.5 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -307,10 +336,10 @@ export default function Chat() {
           {recentChats.map((chat, i) => (
             <button
               key={i}
-              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-left hover:bg-secondary/80 transition-colors text-foreground/80"
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-left hover:bg-secondary transition-colors text-foreground/80"
             >
-              <ChatIcon className="w-4 h-4 text-muted-foreground" />
-              {chat}
+              <ChatIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              <span className="truncate">{chat}</span>
             </button>
           ))}
         </div>
@@ -318,7 +347,7 @@ export default function Chat() {
         <div className="p-3 border-t border-border">
           <button
             onClick={handleNewChat}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors text-foreground/80 text-sm font-medium"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors text-foreground/80 text-sm"
           >
             <PlusIcon className="w-4 h-4" />
             New Chat
@@ -327,10 +356,10 @@ export default function Chat() {
       </aside>
 
       {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col relative z-10">
+      <main className="flex-1 flex flex-col min-w-0 relative z-10">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-border bg-white/50 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
+        <header className="flex items-center justify-between h-14 px-4 border-b border-border bg-white/60 backdrop-blur-sm flex-shrink-0">
+          <div className="flex items-center gap-2">
             {!sidebarOpen && (
               <button
                 onClick={() => setSidebarOpen(true)}
@@ -342,14 +371,14 @@ export default function Chat() {
               </button>
             )}
             <GhostMascot size="sm" className="md:hidden float-gentle" />
-            <span className="font-semibold text-foreground md:hidden">Aether AI</span>
+            <span className="font-medium text-foreground text-sm md:hidden">Aether AI</span>
           </div>
           
           <div className="flex items-center gap-2">
             <button className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground">
               <SettingsIcon className="w-5 h-5" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
               <UserIcon className="w-4 h-4 text-primary" />
             </div>
           </div>
@@ -359,23 +388,23 @@ export default function Chat() {
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full px-4 py-8">
-              <div className="relative mb-6">
+              <div className="mb-6">
                 <GhostMascot size="lg" className="float-gentle gentle-pulse" />
               </div>
               
-              <h2 className="text-xl font-semibold text-foreground mb-2 text-center">
+              <h2 className="text-lg font-medium text-foreground mb-1 text-center">
                 Hello! How can I help you today?
               </h2>
               <p className="text-muted-foreground text-center text-sm max-w-sm mb-8">
-                I can help with creative ideas, answer questions, or just have a friendly chat.
+                I can help with creative ideas, answer questions, or have a friendly chat.
               </p>
               
-              <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+              <div className="grid grid-cols-2 gap-2 w-full max-w-md">
                 {suggestions.map((suggestion, i) => (
                   <button
                     key={suggestion.text}
                     onClick={() => setInput(suggestion.text)}
-                    className={`px-4 py-3 rounded-xl bg-white/80 border border-border text-sm text-left hover:border-primary/40 hover:bg-white transition-all card-hover stagger-${i + 1}`}
+                    className={`px-4 py-3 rounded-xl bg-white border border-border text-sm text-left hover:border-primary/30 transition-all card-hover stagger-${i + 1}`}
                   >
                     {suggestion.text}
                   </button>
@@ -383,11 +412,11 @@ export default function Chat() {
               </div>
             </div>
           ) : (
-            <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+            <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex gap-3 message-enter ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                   {msg.role === 'user' ? (
-                    <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                       <UserIcon className="w-4 h-4 text-primary" />
                     </div>
                   ) : (
@@ -396,15 +425,15 @@ export default function Chat() {
                     </div>
                   )}
                   
-                  <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex flex-col max-w-[80%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                     <span className="text-xs text-muted-foreground mb-1 px-1">
                       {msg.role === 'user' ? 'You' : 'Aether'}
                     </span>
                     <div
-                      className={`px-4 py-3 rounded-2xl max-w-[85%] ${
+                      className={`px-4 py-2.5 rounded-2xl ${
                         msg.role === 'user'
-                          ? 'bg-primary/10 border border-primary/20 rounded-br-md'
-                          : 'bg-white border border-border rounded-bl-md shadow-sm'
+                          ? 'bg-primary/8 border border-primary/15 rounded-br-md'
+                          : 'bg-white border border-border rounded-bl-md'
                       }`}
                     >
                       <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">{msg.content}</p>
@@ -420,11 +449,11 @@ export default function Chat() {
                   </div>
                   <div className="flex flex-col items-start">
                     <span className="text-xs text-muted-foreground mb-1 px-1">Aether</span>
-                    <div className="bg-white border border-border rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce-1" />
-                        <span className="w-2 h-2 bg-primary/40 rounded-full animate-bounce-2" />
-                        <span className="w-2 h-2 bg-primary/20 rounded-full animate-bounce-3" />
+                    <div className="bg-white border border-border rounded-2xl rounded-bl-md px-4 py-2.5">
+                      <div className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce-1" />
+                        <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce-2" />
+                        <span className="w-1.5 h-1.5 bg-primary/30 rounded-full animate-bounce-3" />
                       </div>
                     </div>
                   </div>
@@ -432,7 +461,7 @@ export default function Chat() {
               )}
               
               {error && (
-                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm message-enter">
+                <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-destructive/5 border border-destructive/15 text-destructive text-sm message-enter">
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -446,18 +475,18 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border bg-white/50 backdrop-blur-sm p-4">
-          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-            <div className="flex items-end gap-2 bg-white rounded-2xl border border-border p-2 input-focus transition-all">
+        <div className="border-t border-border bg-white/60 backdrop-blur-sm p-4 flex-shrink-0">
+          <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+            <div className="flex items-end gap-2 bg-white rounded-xl border border-border p-2 input-focus transition-all">
               <button
                 type="button"
-                className="p-2.5 rounded-xl hover:bg-secondary transition-colors text-muted-foreground"
+                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
               >
                 <MicIcon className="w-5 h-5" />
               </button>
               <button
                 type="button"
-                className="p-2.5 rounded-xl hover:bg-secondary transition-colors text-muted-foreground"
+                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
               >
                 <AttachIcon className="w-5 h-5" />
               </button>
@@ -469,14 +498,14 @@ export default function Chat() {
                 onKeyDown={handleKeyDown}
                 placeholder="Type your message..."
                 rows={1}
-                className="flex-1 resize-none bg-transparent px-2 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[150px]"
+                className="flex-1 resize-none bg-transparent px-2 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[150px]"
                 disabled={isLoading}
               />
               
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors soft-glow"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors soft-glow"
               >
                 Send
                 <SendIcon className="w-4 h-4" />
