@@ -320,8 +320,8 @@ export default function Chat() {
       </div>
 
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} flex-shrink-0 transition-all duration-300 hidden md:flex flex-col border-r border-border bg-white/70 backdrop-blur-sm relative z-10 overflow-hidden`}>
-        <div className="flex items-center justify-between h-14 px-4 border-b border-border">
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} flex-shrink-0 transition-all duration-300 hidden md:flex flex-col bg-white/70 backdrop-blur-sm relative z-10 overflow-hidden`}>
+        <div className="flex items-center justify-between h-14 px-4 border-b border-border/50">
           <div className="flex items-center gap-2">
             <GhostMascot size="sm" className="float-gentle" />
             <span className="font-medium text-foreground text-sm">Aether AI</span>
@@ -336,7 +336,7 @@ export default function Chat() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 space-y-1">
+        <div className="flex-1 overflow-y-auto p-3 space-y-1 border-r border-border/50">
           {recentChats.map((chat, i) => (
             <button
               key={i}
@@ -348,7 +348,7 @@ export default function Chat() {
           ))}
         </div>
 
-        <div className="p-3 border-t border-border">
+        <div className="p-3 border-t border-r border-border/50">
           <button
             onClick={handleNewChat}
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors text-foreground/80 text-sm"
