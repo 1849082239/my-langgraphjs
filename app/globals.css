@@ -222,3 +222,34 @@ body {
 .dandelion-seed-3 {
   animation: dandelion-float 10s ease-in-out 4s infinite;
 }
+
+/* Frosted glass dividers */
+.frosted-divider-b {
+  position: relative;
+}
+
+.frosted-divider-b::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 164, 214, 0.2), rgba(212, 196, 232, 0.15), transparent);
+  filter: blur(0.5px);
+}
+
+.frosted-divider-t {
+  position: relative;
+}
+
+.frosted-divider-t::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 164, 214, 0.2), rgba(212, 196, 232, 0.15), transparent);
+  filter: blur(0.5px);
+}

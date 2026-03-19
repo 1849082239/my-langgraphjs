@@ -305,23 +305,35 @@ export default function Chat() {
 
   return (
     <div className="flex h-screen soft-bg relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-8 opacity-25 sway pointer-events-none">
-        <VioletFlower className="w-16 h-24" />
+      {/* Decorative elements - lavender and dandelion */}
+      <div className="absolute bottom-0 left-6 opacity-30 sway pointer-events-none">
+        <LavenderSprig className="w-10 h-28" />
       </div>
-      <div className="absolute bottom-0 left-20 opacity-20 sway pointer-events-none" style={{ animationDelay: '0.5s' }}>
-        <LavenderSprig className="w-8 h-20" />
+      <div className="absolute bottom-0 left-16 opacity-25 sway pointer-events-none" style={{ animationDelay: '0.3s' }}>
+        <VioletFlower className="w-14 h-20" />
       </div>
-      <div className="absolute bottom-0 right-12 opacity-20 sway pointer-events-none" style={{ animationDelay: '1s' }}>
+      <div className="absolute bottom-0 left-28 opacity-20 sway pointer-events-none" style={{ animationDelay: '0.7s' }}>
+        <LavenderSprig className="w-8 h-24" />
+      </div>
+      <div className="absolute bottom-0 right-8 opacity-25 sway pointer-events-none" style={{ animationDelay: '1s' }}>
         <Dandelion className="w-20 h-28" withSeeds />
       </div>
-      <div className="absolute bottom-0 right-32 opacity-15 sway pointer-events-none" style={{ animationDelay: '1.5s' }}>
+      <div className="absolute bottom-0 right-28 opacity-20 sway pointer-events-none" style={{ animationDelay: '1.3s' }}>
+        <LavenderSprig className="w-9 h-26" />
+      </div>
+      <div className="absolute bottom-0 right-44 opacity-15 sway pointer-events-none" style={{ animationDelay: '1.6s' }}>
         <VioletFlower className="w-12 h-18" />
+      </div>
+      <div className="absolute top-20 right-16 opacity-10 float-gentle pointer-events-none">
+        <Dandelion className="w-16 h-24" withSeeds />
+      </div>
+      <div className="absolute top-32 left-[280px] opacity-10 float-gentle pointer-events-none" style={{ animationDelay: '2s' }}>
+        <LavenderSprig className="w-6 h-16" />
       </div>
 
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} flex-shrink-0 transition-all duration-300 hidden md:flex flex-col bg-white/70 backdrop-blur-sm relative z-10 overflow-hidden`}>
-        <div className="flex items-center justify-between h-14 px-4 border-b border-border/50">
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} flex-shrink-0 transition-all duration-300 hidden md:flex flex-col bg-white/50 backdrop-blur-md relative z-10 overflow-hidden border-r border-border/30`}>
+        <div className="flex items-center justify-between h-14 px-4 frosted-divider-b">
           <div className="flex items-center gap-2">
             <GhostMascot size="sm" className="float-gentle" />
             <span className="font-medium text-foreground text-sm">Aether AI</span>
@@ -336,7 +348,7 @@ export default function Chat() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 space-y-1 border-r border-border/50">
+        <div className="flex-1 overflow-y-auto p-3 space-y-1">
           {recentChats.map((chat, i) => (
             <button
               key={i}
@@ -348,10 +360,10 @@ export default function Chat() {
           ))}
         </div>
 
-        <div className="p-3 border-t border-r border-border/50">
+        <div className="p-3 frosted-divider-t">
           <button
             onClick={handleNewChat}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors text-foreground/80 text-sm"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-secondary/80 hover:bg-secondary transition-colors text-foreground/80 text-sm"
           >
             <PlusIcon className="w-4 h-4" />
             New Chat
@@ -362,7 +374,7 @@ export default function Chat() {
       {/* Main Chat Area */}
       <main className="flex-1 flex flex-col min-w-0 relative z-10">
         {/* Header */}
-        <header className="flex items-center justify-between h-14 px-4 border-b border-border bg-white/60 backdrop-blur-sm flex-shrink-0">
+        <header className="flex items-center justify-between h-14 px-4 frosted-divider-b bg-white/50 backdrop-blur-md flex-shrink-0">
           <div className="flex items-center gap-2">
             {!sidebarOpen && (
               <button
@@ -479,9 +491,9 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border bg-white/60 backdrop-blur-sm p-4 flex-shrink-0">
+        <div className="frosted-divider-t bg-white/50 backdrop-blur-md p-4 flex-shrink-0">
           <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-            <div className="flex items-end gap-2 bg-white rounded-xl border border-border p-2 input-focus transition-all">
+            <div className="flex items-end gap-2 bg-white/80 rounded-xl border border-border/40 p-2 input-focus transition-all">
               <button
                 type="button"
                 className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
