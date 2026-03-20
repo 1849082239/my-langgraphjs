@@ -4,7 +4,7 @@ import { Annotation } from '@langchain/langgraph'
 
 // 千问 API 配置 (DashScope OpenAI 兼容)
 const model = new ChatOpenAI({
-  modelName: 'qwen-flash',
+  modelName: 'qwen-vl-plus-latest',
   apiKey: process.env.DASHSCOPE_API_KEY,
   configuration: {
     baseURL: process.env.NEXT_PUBLIC_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1'
